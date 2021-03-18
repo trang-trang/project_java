@@ -9,13 +9,17 @@ package studentattendance;
  *
  * @author tthuo
  */
-public class Main_form extends javax.swing.JFrame {
+public class Main_form extends javax.swing.JFrame implements Mainmenucallback {
+    public static Login user;
+    
 
     /**
      * Creates new form Main_form
      */
     public Main_form() {
         initComponents();
+        ///setGuessmenu();
+        
     }
 
     /**
@@ -52,12 +56,27 @@ public class Main_form extends javax.swing.JFrame {
         menuCourse.setText("Course");
 
         menuitem_course.setText("Manage Course");
+        menuitem_course.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuitem_courseActionPerformed(evt);
+            }
+        });
         menuCourse.add(menuitem_course);
 
         menuitem_class.setText("Manage Class");
         menuCourse.add(menuitem_class);
 
         menuitem_object.setText("Manage Object");
+        menuitem_object.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuitem_objectMouseClicked(evt);
+            }
+        });
+        menuitem_object.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuitem_objectActionPerformed(evt);
+            }
+        });
         menuCourse.add(menuitem_object);
 
         jMenuBar1.add(menuCourse);
@@ -80,9 +99,25 @@ public class Main_form extends javax.swing.JFrame {
 
     private void menuitem_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuitem_loginActionPerformed
       // TODO add your handling code here:
-      Login_form dlg = new Login_form();
+      Login_form dlg = new Login_form(this);
       dlg.setVisible(true);
     }//GEN-LAST:event_menuitem_loginActionPerformed
+
+    private void menuitem_courseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuitem_courseActionPerformed
+        // TODO add your handling code here:
+        Course_form dlg = new Course_form();
+        dlg.setVisible(true);
+    }//GEN-LAST:event_menuitem_courseActionPerformed
+
+    private void menuitem_objectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuitem_objectMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuitem_objectMouseClicked
+
+    private void menuitem_objectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuitem_objectActionPerformed
+        // TODO add your handling code here:
+        Subject_form dlg = new Subject_form();
+        dlg.setVisible(true);
+    }//GEN-LAST:event_menuitem_objectActionPerformed
 
     /**
      * @param args the command line arguments
@@ -118,7 +153,7 @@ public class Main_form extends javax.swing.JFrame {
             }
         });
     }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
@@ -128,4 +163,36 @@ public class Main_form extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuitem_login;
     private javax.swing.JMenuItem menuitem_object;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setAdminmenu() {
+        menuitem_class.setEnabled(true);
+        menuitem_course.setEnabled(true);
+         menuitem_object.setEnabled(true);
+       
+    }
+
+    @Override
+    public void setTeachermenu() {
+       menuitem_class.setEnabled(false);
+       menuitem_course.setEnabled(false);
+         menuitem_object.setEnabled(false);
+    }
+
+    @Override
+    public void setGuessmenu() {
+          menuitem_class.setEnabled(false);
+           menuitem_class.setEnabled(false);
+       menuitem_course.setEnabled(false);
+         menuitem_object.setEnabled(false);
+    }
+
+    @Override
+    public void setLoginuser(Login login) {
+            user = new Login();
+            user.id = login.id;
+            user.role = login.role;
+            user.username = login.username;
+            user.pass = login.pass;
+    }
 }

@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package studentattendance;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,15 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /**
  *
- * @author tthuo
- */
-
-/**
- *
- * @author tthuo
+ * @author Admin
  */
 public class DatabaseConnection {
     static String ketnoi = "jdbc:sqlserver://localhost;databaseName=Student_attendance;user=sa;password=sa";
@@ -32,7 +25,7 @@ public class DatabaseConnection {
     {
         int kq = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,11 +45,13 @@ public class DatabaseConnection {
         }
         return kq;
     }
-      static int Capnhatdulieu( String sqlquery)
+     
+     
+    static int Update( String sqlquery)
     {
         int kq = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,16 +71,95 @@ public class DatabaseConnection {
         }
         return kq;
     }
+      //
+       public static List<Course> ListCourse()
+    {
+        List<Course> result = new ArrayList<>();
+        String sql = "select * from Course2";
+         try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException ex) {
+           
+        }
+        ResultSet res ;
+         try (Connection conn = DriverManager.getConnection(
+                ketnoi);) {
+             System.out.println("---ketnoi ok-----");
+           Statement stmt = conn.createStatement();
+             res = (ResultSet) stmt.executeQuery(sql);
+               if(res != null)
+            {
+                while (res.next()) {
+
+                    int id = res.getInt("id");
+                    String name = res.getString("course_name");
+                    System.out.println("id:" + id);
+                    System.out.println("name:");
+                    Course newitem = new Course(id,name);
+                    result.add(newitem);
+                }
+            }
+           
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       
+         return result;
+        
+    }
+       
+        public static List<Subject> ListSubject()
+    {
+        List<Subject> result = new ArrayList<>();
+        String sql = "select * from Subject";
+         try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException ex) {
+           
+        }
+        ResultSet res ;
+         try (Connection conn = DriverManager.getConnection(
+                ketnoi);) {
+             System.out.println("---ketnoi ok-----");
+           Statement stmt = conn.createStatement();
+             res = (ResultSet) stmt.executeQuery(sql);
+               if(res != null)
+            {
+                while (res.next()) {
+
+                    int id = res.getInt("id");
+                    String name = res.getString("subject_name");
+                    System.out.println("id:" + id);
+                    System.out.println("name:");
+                    Subject newitem = new Subject(id,name);
+                    result.add(newitem);
+                }
+            }
+           
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       
+         return result;
+        
+    }
+       
+       
+       
        public static Login checkLogin( String username, String password)
     {
         System.out.println("---bat dau ket noi-----");
        Login kq = null;
         String sql = "select * from login where username = '"+username+"' and pass = '" + password +"'";
-//         try {
-//           // Class.forName("com.mysql.cj.jdbc.Driver");
-//        } catch (ClassNotFoundException ex) {
-//           
-//        }
+         try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException ex) {
+           
+        }
         ResultSet res ;
          try (Connection conn = DriverManager.getConnection(
                 ketnoi);) {
@@ -99,8 +173,11 @@ public class DatabaseConnection {
                     int id = res.getInt("ID");
                     String ten = res.getString("username");
                      String pass = res.getString("pass");
-                  
+                   int role = res.getInt("role");
                      kq = new Login(ten,pass);
+                     kq.id = id;
+                     kq.role = role;
+                     
                     
                   
                 }
@@ -115,6 +192,7 @@ public class DatabaseConnection {
          return kq;
         
     }  
+}
 //      public static List<Noidung> laydsthu()
 //    {
 //        List<Noidung> result = new ArrayList<>();
@@ -232,4 +310,3 @@ public class DatabaseConnection {
 //         return result;
 //        
 //    }
-}
